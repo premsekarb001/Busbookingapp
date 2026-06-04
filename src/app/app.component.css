@@ -1,0 +1,22 @@
+.navbar-brand {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.nav-link.active {
+  font-weight: bold;
+  border-bottom: 2px solid #ffc107;
+}
+
+footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  footer {
+    position: relative;
+    margin-top: 2rem;
+  }
+}

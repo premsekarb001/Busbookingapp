@@ -1,0 +1,511 @@
+/* src/app/components/seat-selection/seat-selection.component.css */
+
+/* Container Styles */
+.seat-selection-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  padding: 1rem;
+}
+
+/* Loading State */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 60vh;
+}
+
+.loader {
+  width: 50px;
+  height: 50px;
+  border: 4px solid #e0e0e0;
+  border-top-color: #667eea;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loading-container p {
+  margin-top: 1rem;
+  color: #666;
+  font-size: 1.1rem;
+}
+
+/* Header Styles */
+.selection-header {
+  max-width: 1400px;
+  margin: 0 auto 1rem;
+}
+
+.back-btn {
+  background: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: #667eea;
+  transition: all 0.3s;
+  margin-bottom: 1rem;
+}
+
+.back-btn:hover {
+  transform: translateX(-5px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.bus-summary {
+  background: white;
+  border-radius: 16px;
+  padding: 1rem 1.5rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.bus-summary h1 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.route-summary {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  color: #666;
+}
+
+.route-summary i {
+  color: #667eea;
+}
+
+.date {
+  background: #f0f0f0;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+}
+
+/* Stats Container */
+.stats-container {
+  max-width: 1400px;
+  margin: 1rem auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.stat-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.stat-card i {
+  font-size: 2rem;
+  color: #667eea;
+}
+
+.stat-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-value {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.stat-label {
+  font-size: 0.8rem;
+  color: #666;
+}
+
+/* Main Content */
+.selection-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 2rem;
+}
+
+/* Seat Map Section */
+.seat-map-section {
+  background: white;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.seat-map-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.seat-map-header h3 {
+  margin: 0;
+  color: #333;
+}
+
+.legend {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+}
+
+.seat-demo {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+}
+
+.seat-demo.available {
+  background: #4CAF50;
+}
+
+.seat-demo.selected {
+  background: #FFC107;
+}
+
+.seat-demo.booked {
+  background: #F44336;
+  opacity: 0.5;
+}
+
+.seat-demo.ladies {
+  background: #E91E63;
+}
+
+/* Bus Layout */
+.bus-layout {
+  background: #f9f9f9;
+  border-radius: 12px;
+  padding: 1.5rem;
+  border: 2px solid #e0e0e0;
+}
+
+.driver-area {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background: #e0e0e0;
+  border-radius: 12px;
+}
+
+.steering-wheel {
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.driver-seat {
+  font-weight: bold;
+  color: #333;
+}
+
+.deck {
+  margin: 1rem 0;
+}
+
+.deck-title {
+  text-align: center;
+  font-weight: bold;
+  padding: 0.5rem;
+  background: #667eea;
+  color: white;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.seat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem;
+}
+
+.seat-btn {
+  position: relative;
+  aspect-ratio: 1;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  font-weight: bold;
+}
+
+.seat-btn.available {
+  background: #4CAF50;
+  color: white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.seat-btn.available:hover {
+  transform: scale(1.05);
+  background: #45a049;
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
+}
+
+.seat-btn.selected {
+  background: #FFC107;
+  color: #333;
+  transform: scale(0.95);
+  box-shadow: 0 0 0 2px #FFC107, 0 0 0 4px rgba(255, 193, 7, 0.3);
+}
+
+.seat-btn.booked {
+  background: #F44336;
+  color: white;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.seat-btn.ladies.available {
+  background: #E91E63;
+}
+
+.seat-btn.ladies.available:hover {
+  background: #c2185b;
+}
+
+.seat-number {
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.ladies-icon,
+.check-icon {
+  font-size: 0.7rem;
+}
+
+.middle-aisle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  margin: 1rem 0;
+  background: #e0e0e0;
+  border-radius: 8px;
+  color: #666;
+}
+
+/* Seat Instructions */
+.seat-instructions {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e0e0e0;
+}
+
+.instruction {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0.5rem 0;
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.instruction i {
+  width: 20px;
+  color: #667eea;
+}
+
+/* Booking Summary */
+.booking-summary {
+  position: sticky;
+  top: 1rem;
+  height: fit-content;
+}
+
+.summary-card {
+  background: white;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.summary-card h3 {
+  margin: 0 0 1rem 0;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #667eea;
+  color: #333;
+}
+
+.selected-seats-section {
+  margin-bottom: 1.5rem;
+}
+
+.section-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.clear-btn {
+  background: none;
+  border: none;
+  color: #F44336;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.clear-btn:hover {
+  text-decoration: underline;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 2rem;
+  background: #f9f9f9;
+  border-radius: 12px;
+  color: #999;
+}
+
+.selected-seats-list {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.selected-seat-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem;
+  background: #f9f9f9;
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+}
+
+.seat-number-badge {
+  font-weight: bold;
+  font-size: 1rem;
+  color: #667eea;
+}
+
+.seat-type {
+  font-size: 0.75rem;
+  color: #999;
+}
+
+.seat-price {
+  font-weight: bold;
+  color: #4CAF50;
+}
+
+.price-breakdown {
+  margin: 1.5rem 0;
+  padding: 1rem 0;
+  border-top: 1px solid #e0e0e0;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.price-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.price-row.total {
+  border-top: 2px solid #e0e0e0;
+  margin-top: 0.5rem;
+  padding-top: 1rem;
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.proceed-btn {
+  width: 100%;
+  padding: 1rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s;
+  margin-bottom: 1rem;
+}
+
+.proceed-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+.proceed-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.terms-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  color: #999;
+  text-align: center;
+  justify-content: center;
+}
+
+/* Responsive */
+@media (max-width: 968px) {
+  .selection-content {
+    grid-template-columns: 1fr;
+  }
+  
+  .booking-summary {
+    position: static;
+  }
+  
+  .stats-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .seat-grid {
+    gap: 0.5rem;
+  }
+  
+  .seat-number {
+    font-size: 0.75rem;
+  }
+  
+  .stat-value {
+    font-size: 1.2rem;
+  }
+}

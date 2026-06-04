@@ -1,0 +1,107 @@
+<div class="my-bookings-container">
+  <div class="container mt-4">
+    
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2>
+        <i class="fa fa-ticket"></i> My Bookings
+      </h2>
+      <div>
+        <button class="btn btn-warning me-2" (click)="addDummyBooking()">
+          <i class="fa fa-plus"></i> Add Test Booking
+        </button>
+        <button class="btn btn-primary" (click)="goBack()">
+          <i class="fa fa-search"></i> Book More
+        </button>
+      </div>
+    </div>
+    
+    <!-- Loading State -->
+    @if (isLoading()) {
+      <div class="text-center py-5">
+        <div class="spinner-border text-primary"></div>
+        <p>Loading your bookings...</p>
+      </div>
+    }
+    
+    <!-- No Bookings -->
+    @if (!isLoading() && bookings().length === 0) {
+      <div class="empty-state">
+        <i class="fa fa-calendar-times"></i>
+        <h3>No Bookings Found</h3>
+        <p>You haven't booked any tickets yet.</p>
+        <button class="btn btn-primary" (click)="goBack()">
+          <i class="fa fa-search"></i> Search Buses
+        </button>
+      </div>
+    }
+    
+    <!-- Bookings List -->
+    @if (!isLoading() && bookings().length > 0) {
+      <div class="bookings-list">
+        @for (booking of bookings(); track booking.id) {
+          <div class="booking-card">
+            <div class="booking-header">
+              <div class="booking-id">
+                <i class="fa fa-ticket"></i>
+                {{ booking.bookingId }}
+              </div>
+              <div class="booking-status confirmed">
+                <i class="fa fa-check-circle"></i> {{ booking.status }}
+              </div>
+            </div>
+            
+            <div class="booking-body">
+              <div class="bus-info">
+                <h4>{{ booking.busName }}</h4>
+                <p>{{ booking.busNumber }}</p>
+              </div>
+              
+              <div class="route-info">
+                <div class="route-point">
+                  <strong>{{ booking.departureTime }}</strong>
+                  <p>{{ booking.from }}</p>
+                </div>
+                <div class="route-arrow">
+                  <i class="fa fa-arrow-right"></i>
+                </div>
+                <div class="route-point">
+                  <strong>{{ booking.arrivalTime }}</strong>
+                  <p>{{ booking.to }}</p>
+                </div>
+              </div>
+              
+              <div class="seats-info">
+                <strong>Seats:</strong>
+                @for (seat of booking.seatNumbers; track seat) {
+                  <span class="seat-badge">{{ seat }}</span>
+                }
+              </div>
+              
+              <div class="passenger-info">
+                <p><i class="fa fa-user"></i> {{ booking.passengerName }}</p>
+                <p><i class="fa fa-phone"></i> {{ booking.passengerPhone }}</p>
+              </div>
+              
+              <div class="price-info">
+                <strong>Total Amount:</strong> ₹{{ booking.totalAmount }}
+              </div>
+            </div>
+            
+            <div class="booking-footer">
+              <button class="btn-view" (click)="viewBookingDetails(booking)">
+                <i class="fa fa-eye"></i> View Details
+              </button>
+              <button class="btn-download" (click)="downloadTicket(booking)">
+                <i class="fa fa-download"></i> Download Ticket
+              </button>
+              <button class="btn-cancel" (click)="cancelBooking(booking.id)">
+                <i class="fa fa-times"></i> Cancel
+              </button>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  </div>
+</div>

@@ -1,0 +1,256 @@
+<!-- src/app/components/seat-selection/seat-selection.component.html -->
+<div class="seat-selection-container">
+  
+  <!-- Loading State -->
+  @if (isLoading()) {
+    <div class="loading-container">
+      <div class="loader"></div>
+      <p>Loading seat layout...</p>
+    </div>
+  }
+  
+  @if (!isLoading() && busDetails()) {
+    <!-- Header Section -->
+    <div class="selection-header">
+      <button class="back-btn" (click)="goBack()">
+        <i class="fa fa-arrow-left"></i> Back to Search
+      </button>
+      
+      <div class="bus-summary">
+        <h1>
+          <i class="fa fa-bus"></i> 
+          {{ busDetails()?.busName }}
+        </h1>
+        <div class="route-summary">
+          <span>{{ busDetails()?.from }}</span>
+          <i class="fa fa-arrow-right"></i>
+          <span>{{ busDetails()?.to }}</span>
+          <span class="date">{{ busDetails()?.departureTime }} → {{ busDetails()?.arrivalTime }}</span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Stats Container -->
+    <div class="stats-container">
+      <div class="stat-card">
+        <i class="fa fa-chair"></i>
+        <div class="stat-info">
+          <span class="stat-value">{{ getTotalSeatsCount() }}</span>
+          <span class="stat-label">Total Seats</span>
+        </div>
+      </div>
+      <div class="stat-card">
+        <i class="fa fa-check-circle"></i>
+        <div class="stat-info">
+          <span class="stat-value">{{ getAvailableSeatsCount() }}</span>
+          <span class="stat-label">Available</span>
+        </div>
+      </div>
+      <div class="stat-card">
+        <i class="fa fa-times-circle"></i>
+        <div class="stat-info">
+          <span class="stat-value">{{ getBookedSeatsCount() }}</span>
+          <span class="stat-label">Booked</span>
+        </div>
+      </div>
+      <div class="stat-card">
+        <i class="fa fa-hand-pointer"></i>
+        <div class="stat-info">
+          <span class="stat-value">{{ selectedSeatCount() }}</span>
+          <span class="stat-label">Selected</span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="selection-content">
+      <!-- Seat Map Section -->
+      <div class="seat-map-section">
+        <div class="seat-map-header">
+          <h3><i class="fa fa-map"></i> Select Your Seats</h3>
+          <div class="legend">
+            <div class="legend-item">
+              <div class="seat-demo available"></div>
+              <span>Available</span>
+            </div>
+            <div class="legend-item">
+              <div class="seat-demo selected"></div>
+              <span>Selected</span>
+            </div>
+            <div class="legend-item">
+              <div class="seat-demo booked"></div>
+              <span>Booked</span>
+            </div>
+            <div class="legend-item">
+              <div class="seat-demo ladies"></div>
+              <span>Ladies</span>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Bus Layout -->
+        <div class="bus-layout">
+          <!-- Driver Area -->
+          <div class="driver-area">
+            <div class="steering-wheel">
+              <i class="fa fa-car"></i>
+            </div>
+            <div class="driver-seat">DRIVER</div>
+          </div>
+          
+          <!-- Upper Deck -->
+          <div class="deck upper-deck">
+            <div class="deck-title">Upper Deck</div>
+            <div class="seat-grid">
+              @for (seat of seats(); track seat.seatNumber) {
+                @if (seat.seatNumber <= 40) {
+                  <button class="seat-btn"
+                    [class]="getSeatClass(seat)"
+                    [class.ladies]="isLadiesSeat(seat.seatNumber) && !seat.isBooked"
+                    [disabled]="seat.isBooked"
+                    (click)="toggleSeat(seat)">
+                    <span class="seat-number">{{ seat.seatNumber }}</span>
+                    @if (isLadiesSeat(seat.seatNumber) && !seat.isBooked && !seat.isSelected) {
+                      <span class="ladies-icon">👩</span>
+                    }
+                    @if (seat.isSelected) {
+                      <span class="check-icon">✓</span>
+                    }
+                  </button>
+                }
+              }
+            </div>
+          </div>
+          
+          <!-- Middle Aisle -->
+          <div class="middle-aisle">
+            <i class="fa fa-arrow-down"></i>
+            <span>Stairs</span>
+            <i class="fa fa-arrow-down"></i>
+          </div>
+          
+          <!-- Lower Deck -->
+          <div class="deck lower-deck">
+            <div class="deck-title">Lower Deck</div>
+            <div class="seat-grid">
+              @for (seat of seats(); track seat.seatNumber) {
+                @if (seat.seatNumber > 40) {
+                  <button class="seat-btn"
+                    [class]="getSeatClass(seat)"
+                    [disabled]="seat.isBooked"
+                    (click)="toggleSeat(seat)">
+                    <span class="seat-number">{{ seat.seatNumber }}</span>
+                    @if (seat.isSelected) {
+                      <span class="check-icon">✓</span>
+                    }
+                  </button>
+                }
+              }
+            </div>
+          </div>
+        </div>
+        
+        <!-- Seat Instructions -->
+        <div class="seat-instructions">
+          <div class="instruction">
+            <i class="fa fa-info-circle"></i>
+            <span>Green seats are available for booking</span>
+          </div>
+          <div class="instruction">
+            <i class="fa fa-exclamation-triangle"></i>
+            <span>Red seats are already booked</span>
+          </div>
+          <div class="instruction">
+            <i class="fa fa-female"></i>
+            <span>Pink seats are reserved for ladies</span>
+          </div>
+          <div class="instruction">
+            <i class="fa fa-ban"></i>
+            <span>Maximum 6 seats per booking</span>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Booking Summary Section -->
+      <div class="booking-summary">
+        <div class="summary-card">
+          <h3><i class="fa fa-shopping-cart"></i> Booking Summary</h3>
+          
+          <!-- Selected Seats -->
+          <div class="selected-seats-section">
+            <div class="section-title">
+              Selected Seats
+              @if (selectedSeatCount() > 0) {
+                <button class="clear-btn" (click)="clearSelection()">
+                  <i class="fa fa-trash"></i> Clear All
+                </button>
+              }
+            </div>
+            
+            @if (selectedSeatCount() === 0) {
+              <div class="empty-state">
+                <i class="fa fa-chair"></i>
+                <p>No seats selected yet</p>
+                <small>Click on available seats to select them</small>
+              </div>
+            } @else {
+              <div class="selected-seats-list">
+                @for (seat of selectedSeats(); track seat.seatNumber) {
+                  <div class="selected-seat-item">
+                    <div class="seat-info">
+                      <span class="seat-number-badge">{{ seat.seatNumber }}</span>
+                      <span class="seat-type">Standard Seat</span>
+                    </div>
+                    <div class="seat-price">
+                      ₹{{ busDetails()?.price }}
+                    </div>
+                  </div>
+                }
+              </div>
+            }
+          </div>
+          
+          <!-- Price Breakdown -->
+          @if (selectedSeatCount() > 0) {
+            <div class="price-breakdown">
+              <div class="price-row">
+                <span>Ticket Price ({{ selectedSeatCount() }} seats)</span>
+                <span>₹{{ busDetails()?.price }} × {{ selectedSeatCount() }}</span>
+              </div>
+              <div class="price-row">
+                <span>Base Fare</span>
+                <span>₹{{ totalPrice() }}</span>
+              </div>
+              <div class="price-row">
+                <span>Taxes & Fees (5% GST)</span>
+                <span>₹{{ totalPrice() * 0.05 | number:'1.0-0' }}</span>
+              </div>
+              <div class="price-row total">
+                <span>Total Amount</span>
+                <span>₹{{ totalPrice() + (totalPrice() * 0.05) | number:'1.0-0' }}</span>
+              </div>
+            </div>
+          }
+          
+          <!-- Proceed Button -->
+          <button class="proceed-btn" 
+                  [disabled]="selectedSeatCount() === 0"
+                  (click)="proceedToBooking()">
+            @if (selectedSeatCount() === 0) {
+              <i class="fa fa-lock"></i> Select Seats to Continue
+            } @else {
+              <i class="fa fa-arrow-right"></i> 
+              Proceed to Booking ({{ selectedSeatCount() }} seats)
+            }
+          </button>
+          
+          <!-- Terms -->
+          <div class="terms-info">
+            <i class="fa fa-shield"></i>
+            <span>By proceeding, you agree to our cancellation and refund policy</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+</div>

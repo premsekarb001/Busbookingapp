@@ -1,0 +1,213 @@
+<!-- src/app/components/booking/booking.component.html -->
+<div class="booking-container">
+  
+  <!-- Loading State -->
+  @if (isLoading() && !bookingSuccess()) {
+    <div class="loading-overlay">
+      <div class="spinner"></div>
+      <p>Processing your booking...</p>
+    </div>
+  }
+  
+  <!-- Success State -->
+  @if (bookingSuccess()) {
+    <div class="success-container">
+      <div class="success-card">
+        <div class="success-icon">
+          <i class="fa fa-check-circle"></i>
+        </div>
+        <h1>Booking Confirmed! 🎉</h1>
+        <p>Your ticket has been booked successfully</p>
+        
+        <div class="booking-details-card">
+          <h3>Booking Details</h3>
+          <div class="detail-row">
+            <span class="label">Booking ID:</span>
+            <span class="value">#{{ bookingId() }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="label">Status:</span>
+            <span class="value status-confirmed">Confirmed</span>
+          </div>
+        </div>
+        
+        <div class="action-buttons">
+          <button class="btn-print" (click)="printTicket()">
+            <i class="fa fa-print"></i> Print Ticket
+          </button>
+          <button class="btn-home" (click)="resetAndGoHome()">
+            <i class="fa fa-home"></i> Book Another Ticket
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+  
+  <!-- Booking Form -->
+  @if (!bookingSuccess()) {
+    <div class="booking-wrapper">
+      <div class="booking-header">
+        <h1>
+          <i class="fa fa-ticket"></i> 
+          Complete Your Booking
+        </h1>
+        <p>Review your journey details and provide passenger information</p>
+      </div>
+      
+      <div class="booking-content">
+        <!-- Left Column - Journey Details -->
+        <div class="journey-details">
+          <div class="card">
+            <div class="card-header">
+              <i class="fa fa-bus"></i>
+              <h3>Journey Details</h3>
+            </div>
+            
+            @if (busDetails()) {
+              <div class="bus-info">
+                <div class="bus-name">
+                  <strong>{{ busDetails()?.busName }}</strong>
+                  <span class="bus-number">{{ busDetails()?.busNumber }}</span>
+                </div>
+                
+                <div class="route-info">
+                  <div class="route-point">
+                    <div class="time">{{ busDetails()?.departureTime }}</div>
+                    <div class="city">{{ busDetails()?.from }}</div>
+                    <div class="date">Today</div>
+                  </div>
+                  
+                  <div class="route-line">
+                    <div class="line"></div>
+                    <i class="fa fa-arrow-down"></i>
+                  </div>
+                  
+                  <div class="route-point">
+                    <div class="time">{{ busDetails()?.arrivalTime }}</div>
+                    <div class="city">{{ busDetails()?.to }}</div>
+                    <div class="date">Today</div>
+                  </div>
+                </div>
+              </div>
+            }
+            
+            <div class="seat-info">
+              <h4><i class="fa fa-chair"></i> Selected Seats</h4>
+              <div class="seat-numbers">
+                @for (seat of selectedSeats(); track seat) {
+                  <span class="seat-badge">{{ seat }}</span>
+                }
+              </div>
+            </div>
+            
+            <div class="price-breakdown">
+              <div class="price-row">
+                <span>Ticket Price ({{ selectedSeats().length }} seats)</span>
+                <span>₹{{ busDetails()?.price }} x {{ selectedSeats().length }}</span>
+              </div>
+              <div class="price-row">
+                <span>GST (5%)</span>
+                <span>₹{{ totalAmount() * 0.05 | number:'1.0-0' }}</span>
+              </div>
+              <div class="price-row total">
+                <span>Total Amount</span>
+                <span>₹{{ totalAmount() + (totalAmount() * 0.05) | number:'1.0-0' }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Right Column - Passenger Form -->
+        <div class="passenger-form">
+          <div class="card">
+            <div class="card-header">
+              <i class="fa fa-user"></i>
+              <h3>Passenger Details</h3>
+            </div>
+            
+            <form (ngSubmit)="confirmBooking()">
+              <div class="form-group">
+                <label>Full Name *</label>
+                <input type="text" 
+                       class="form-control"
+                       [(ngModel)]="passengerData.name" 
+                       name="name"
+                       placeholder="Enter passenger name"
+                       required>
+                <small>As per ID proof</small>
+              </div>
+              
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Email *</label>
+                  <input type="email" 
+                         class="form-control"
+                         [(ngModel)]="passengerData.email" 
+                         name="email"
+                         placeholder="your@email.com"
+                         required>
+                </div>
+                
+                <div class="form-group">
+                  <label>Phone Number *</label>
+                  <input type="tel" 
+                         class="form-control"
+                         [(ngModel)]="passengerData.phone" 
+                         name="phone"
+                         placeholder="9876543210"
+                         maxlength="10"
+                         pattern="[0-9]{10}"
+                         required>
+                </div>
+              </div>
+              
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Age *</label>
+                  <input type="number" 
+                         class="form-control"
+                         [(ngModel)]="passengerData.age" 
+                         name="age"
+                         placeholder="Age"
+                         min="1"
+                         max="120"
+                         required>
+                </div>
+                
+                <div class="form-group">
+                  <label>Gender</label>
+                  <select class="form-control" [(ngModel)]="passengerData.gender" name="gender">
+                    <option value="">Select</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div class="terms">
+                <label class="checkbox-label">
+                  <input type="checkbox" required>
+                  <span>I agree to the <a href="#">Terms & Conditions</a> and <a href="#">Cancellation Policy</a></span>
+                </label>
+              </div>
+              
+              <div class="form-actions">
+                <button type="button" class="btn-back" (click)="goBack()">
+                  <i class="fa fa-arrow-left"></i> Back
+                </button>
+                <button type="submit" class="btn-confirm" [disabled]="isLoading()">
+                  @if (isLoading()) {
+                    <i class="fa fa-spinner fa-spin"></i> Processing...
+                  } @else {
+                    <i class="fa fa-check"></i> Confirm Booking
+                  }
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+</div>

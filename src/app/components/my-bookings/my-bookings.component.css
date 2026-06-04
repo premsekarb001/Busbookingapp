@@ -1,0 +1,172 @@
+.my-bookings-container {
+  min-height: 100vh;
+  background: #f5f7fa;
+  padding-bottom: 2rem;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 4rem;
+  background: white;
+  border-radius: 16px;
+  margin-top: 2rem;
+}
+
+.empty-state i {
+  font-size: 4rem;
+  color: #ccc;
+  margin-bottom: 1rem;
+}
+
+.booking-card {
+  background: white;
+  border-radius: 12px;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  overflow: hidden;
+}
+
+.booking-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.booking-id {
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.booking-status.confirmed {
+  background: #4CAF50;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+}
+
+.booking-body {
+  padding: 1.5rem;
+}
+
+.bus-info h4 {
+  margin: 0;
+  color: #333;
+}
+
+.bus-info p {
+  color: #666;
+  margin: 0;
+}
+
+.route-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 1rem 0;
+  padding: 1rem;
+  background: #f9f9f9;
+  border-radius: 12px;
+}
+
+.route-point {
+  text-align: center;
+}
+
+.route-point strong {
+  font-size: 1.1rem;
+}
+
+.route-point p {
+  margin: 0;
+  color: #666;
+}
+
+.route-arrow {
+  color: #667eea;
+}
+
+.seats-info {
+  margin: 1rem 0;
+}
+
+.seat-badge {
+  display: inline-block;
+  background: #4CAF50;
+  color: white;
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+  margin: 0 0.25rem;
+  font-size: 0.85rem;
+}
+
+.passenger-info {
+  display: flex;
+  gap: 1.5rem;
+  margin: 1rem 0;
+  padding: 0.5rem 0;
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+}
+
+.passenger-info p {
+  margin: 0;
+}
+
+.price-info {
+  font-size: 1.2rem;
+  color: #4CAF50;
+}
+
+.booking-footer {
+  display: flex;
+  gap: 0.5rem;
+  padding: 1rem 1.5rem;
+  background: #f9f9f9;
+  border-top: 1px solid #eee;
+}
+
+.btn-view, .btn-download, .btn-cancel {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.btn-view {
+  background: #667eea;
+  color: white;
+}
+
+.btn-download {
+  background: #4CAF50;
+  color: white;
+}
+
+.btn-cancel {
+  background: #dc3545;
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .booking-footer {
+    flex-wrap: wrap;
+  }
+  
+  .passenger-info {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .route-info {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .route-arrow {
+    transform: rotate(90deg);
+  }
+}
